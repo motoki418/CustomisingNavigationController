@@ -15,7 +15,7 @@ extension View{
         // MARK: Updating Nav Bar Color
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.01){
             NotificationCenter.default.post(name: NSNotification.Name("UPDATENAVBAR"), object: nil,userInfo: [
-            //Sending Color
+                //Sending Color
                 "color": color
             ])
         }
@@ -29,8 +29,15 @@ extension View{
         }
     }
     
-    func setNavTitleColor(color: Color){
+    func setNavbarTitleColor(color: Color){
         
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.01){
+            NotificationCenter.default.post(name: NSNotification.Name("UPDATENAVBAR"), object: nil,userInfo: [
+                //Sending Color
+                "color": color,
+                "forTitle": true
+            ])
+        }
     }
 }
 
@@ -55,7 +62,38 @@ extension UINavigationController{
     func upadateNavBar(notification: Notification) {
         
         if let info = notification.userInfo{
-        let color = info["color"] as! Color
+            
+            let color = info["color"] as! Color
+            
+            if let _ = info["forTitle"]{
+                
+                // MARK: Title Color
+                // Update color in Appearnce
+                navigationBar.standardAppearance.largeTitleTextAttributes = [.foregroundColor: UIColor(color)]
+                navigationBar.standardAppearance.titleTextAttributes = [.foregroundColor: UIColor(color)]
+                
+                navigationBar.scrollEdgeAppearance?.largeTitleTextAttributes = [.foregroundColor: UIColor(color)]
+                navigationBar.scrollEdgeAppearance?.titleTextAttributes = [.foregroundColor: UIColor(color)]
+                
+                navigationBar.compactAppearance?.largeTitleTextAttributes = [.foregroundColor: UIColor(color)]
+                navigationBar.compactAppearance?.titleTextAttributes = [.foregroundColor: UIColor(color)]
+                
+                return
+            }
+            
+            
+            if color == .clear{
+                
+                // Transparent Nav Bar
+                let transparentAppearance = UINavigationBarAppearance()
+                transparentAppearance.configureWithTransparentBackground()
+                
+                navigationBar.standardAppearance = transparentAppearance
+                navigationBar.scrollEdgeAppearance = transparentAppearance
+                navigationBar.compactAppearance = transparentAppearance
+                
+                return
+            }
             
             // MARK: Upadating Nav Bar Color
             let appearance = UINavigationBarAppearance()
@@ -69,8 +107,12 @@ extension UINavigationController{
             // MARK: Reset Nav Bar
             let appearance = UINavigationBarAppearance()
             
+            // スクロールしても色を反映させ続ける
+            let transparentAppearance = UINavigationBarAppearance()
+            transparentAppearance.configureWithTransparentBackground()
+            
             navigationBar.standardAppearance = appearance
-            navigationBar.scrollEdgeAppearance = appearance
+            navigationBar.scrollEdgeAppearance = transparentAppearance
             navigationBar.compactAppearance = appearance
         }
     }
