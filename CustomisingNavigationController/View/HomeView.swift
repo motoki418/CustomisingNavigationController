@@ -25,8 +25,9 @@ struct HomeView: View {
                                 .aspectRatio(contentMode: .fill)
                                 .frame(width: size.width, height: size.height)
                                 .cornerRadius(10)
+                            //　画像をタップするとNavigationBarを黄色に
                                 .onTapGesture {
-                                    NotificationCenter.default.post(name: NSNotification.Name("UPDATENAVBAR"), object: nil)
+                                    setNavbarColor(color: .yellow)
                                 }
                         }
                         .frame(height: 180)
@@ -35,6 +36,12 @@ struct HomeView: View {
                 .padding()
             }// VStack
             .navigationTitle("Navigation View")
+            .toolbar{
+                //NavigationBarの色をもとに戻す
+                Button("RESET"){
+                    resetNavBar()
+                }
+            }
         }
     }
 }
