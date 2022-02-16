@@ -21,7 +21,7 @@ extension View{
         }
         
     }
-    
+    // Resetボタンがタップされると呼び出される
     func resetNavBar() {
         // MARK: Resetting Nav Bar
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.01){
